@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Videos</title>
+</head>
+<body>
+    <h1>Available Videos</h1>
+    <ul id="video-list"></ul>
+
+    <script>
+        // Fetch the list of videos from the server
+        async function fetchVideos() {
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                alert('Authorization token is missing. Please log in.');
+                window.location.href = '/';
+            }
+            const response = await fetch('/videos');
+            const videos = await response.json();
+            const videoList = document.getElementById('video-list');
+
+            // Clear the current list
+            videoList.innerHTML = '';
+
+            videos.forEach(video => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `Video: ${video.key} (Size: ${video.size} bytes)`;
+
+                // Create a download button for each video
+                const downloadButton = document.createElement('button');
+                downloadButton.textContent = 'Download';
+                downloadButton.onclick = async () => {
+                    // Fetch the pre-signed URL for this video
+                    const downloadResponse = await fetch(`/download/${video.key}`);
+                    const downloadData = await downloadResponse.json();
+
+                    // Redirect the user to the pre-signed URL
+                    window.location.href = downloadData.url;
+                };
+
+                // Append the button to the list item
+                listItem.appendChild(downloadButton);
+                videoList.appendChild(listItem);
+            });
+        }
+
+        // Fetch videos when the page loads
+        window.onload = fetchVideos;
+    </script>
+</body>
+</html>

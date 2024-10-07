@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Videos in uploads</title>
+</head>
+<body>
+    <!-- chatgpt was used here to give me a list during testing phase,
+     it was intended to then be used for video watching -->
+    <a href="/index.html">Home</a>
+    <h1>Your Videos</h1>
+    <ul id="videoList"></ul>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const videoList = document.getElementById('videoList');
+            const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
+
+            // Fetch list of files
+            fetch('/files', {
+                headers: {
+                    'Authorization': token
+                }
+            })
+            .then(response => response.json())
+            .then(files => {
+                files.forEach(file => {
+                    const li = document.createElement('li');
+
+                    // Create the video player element
+                    const video = document.createElement('video');
+                    video.setAttribute('controls', '');
+                    video.setAttribute('width', '600'); // Adjust the width as needed
+
+                    const source = document.createElement('source');
+                    source.src = `/uploads/${file}`;
+                    source.type = `video/${file.split('.').pop()}`; // Set video type based on file extension
+
+                    video.appendChild(source);
+                    li.appendChild(video);
+
+                    // Display filename
+                    const filename = document.createElement('p');
+                    filename.textContent = file;
+                    li.appendChild(filename);
+
+                    videoList.appendChild(li);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching files:', error);
+            });
+        });
+    </script>
+</body>
+</html>
