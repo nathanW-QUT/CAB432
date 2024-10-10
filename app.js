@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-// const db = require('./config/db'); // Ensure database connection is initialized
 require('dotenv').config();
 S3 = require("@aws-sdk/client-s3");
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
@@ -14,13 +13,14 @@ const uploadRoute = require('./routes/upload');
 const transcodeRoute = require('./routes/transcode');
 const videosRoute = require('./routes/videos');
 const downloadRoute = require('./routes/download');
-
+const dynamoRoute = require('./routes/dynamo');
 app.use('/login', loginRoute); // Use '/login' prefix for the login route
 app.use('/signup', signupRoute);
 app.use(uploadRoute);
 app.use(transcodeRoute);
 app.use(videosRoute);
 app.use(downloadRoute);
+app.use(dynamoRoute);
 app.use(express.static('public'));
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
@@ -28,7 +28,9 @@ app.get('/', (req, res) => {
 app.get('/videos', (req, res) => {
     res.sendFile(__dirname + '/videos.html');
 });
-
+app.get('/dynamo', (req, res) => {
+    res.sendFile(__dirname + '/dynamo.html');
+});
 
 app.get('/upload',  (req, res) => {
     res.sendFile(__dirname + '/upload.html');

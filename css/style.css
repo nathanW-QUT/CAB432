@@ -1,0 +1,29 @@
+*{
+    text-align: center;
+    
+}
+body {
+    background-color: #000;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+body li{
+    margin: 2em;
+    color: aquamarine;
+}
+.pe{
+    color: pink
+}
+h1 {
+    color: #333;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+}
+
+p {
+    color: #666;
+    font-size: 16px;
+    line-height: 1.5;
+}

@@ -4,31 +4,13 @@
     <meta charset="UTF-8" />
     <title>Video Upload and List</title>
     <style>
-      body {
-        font-family: Arial, sans-serif;
-      }
+      body {        font-family: Arial, sans-serif;      }
       .container {
-        max-width: 800px;
-        margin: 0 auto;
-        margin-top: 2em;
-      }
-      h1 {
-        color: #333;
-      }
-      ul {
-        list-style-type: none;
-        padding: 0;
-      }
-      li {
-        margin-bottom: 10px;
-      }
-      a {
-        text-decoration: none;
-        color: #333;
-      }
-      a:hover {
-        text-decoration: underline;
-      }
+        max-width: 800px;        margin: 0 auto;        margin-top: 2em;
+      }      h1 {        color: #333;      }      ul {        list-style-type: none;        padding: 0;      }
+      li {        margin-bottom: 10px;      }
+            a {        text-decoration: none;        color: #333;      }
+      a:hover {        text-decoration: underline;      }
     </style>
   </head>
   <body>
@@ -56,36 +38,37 @@
         window.location.href = "/";
       }
       document
-        .getElementById("uploadForm")
-        .addEventListener("submit", async function (event) {
-          event.preventDefault();
+  .getElementById("uploadForm")
+  .addEventListener("submit", async function (event) {
+    event.preventDefault();
 
-          const form = document.getElementById("uploadForm");
-          const formData = new FormData(form);
+    const form = document.getElementById("uploadForm");
+    const formData = new FormData(form);
 
-          try {
-            const response = await fetch("/upload", {
-              method: "POST",
-              body: formData,
-            });
+    try {
+      const response = await fetch("/upload", {
+        method: "POST",
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: formData,
+      });
 
-            if (response.ok) {
-              const data = await response.json();
-              console.log("File uploaded successfully:", data.fileUrl);
-              alert("File uploaded successfully!");
-              // Optionally, refresh the list of uploaded videos
-              fetchVideos();
-            } else {
-              console.error("File upload failed:", response.statusText);
-              alert("File upload failed. Please try again.");
-            }
-          } catch (error) {
-            console.error("Error uploading file:", error);
-            alert(
-              "An error occurred while uploading the file. Please try again later."
-            );
-          }
-        });
+      if (response.ok) {
+        const data = await response.json();
+        console.log("File uploaded successfully:", data.fileUrl);
+        alert("File uploaded successfully!");
+        fetchVideos();
+      } else {
+        console.error("File upload failed:", response.statusText);
+        alert("File upload failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      alert("An error occurred while uploading the file. Please try again later.");
+    }
+  });
+
     </script>
   </body>
 </html>
